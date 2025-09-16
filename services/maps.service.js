@@ -1,12 +1,17 @@
 const axios = require('axios')
 const captainModel = require('../models/captain.model')
+
 module.exports.getCoordinates = async (address) =>{
     
     if(!address) { 
         throw new Error('Address is required')
     }
     try{
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json&limit=1`)
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json&limit=1` , {
+            headers: {
+                'User-Agent': 'Uber-clone/1.0 (yadhavmundekkat@gmail.com)'
+            }
+        })
 
         if(response.status == 200) { 
             const location = response.data[0]
@@ -32,8 +37,11 @@ module.exports.getDistanceTime = async (origin,destination) => {
         throw new Error('Origin and Destination are required')
     }
     try { 
-        const response = await axios.get(`https://router.project-osrm.org/route/v1/driving/${origin};${destination}?overview=false`)
-
+        const response = await axios.get(`https://router.project-osrm.org/route/v1/driving/${origin};${destination}?overview=false`, {
+            headers: {
+                'User-Agent': 'Uber-clone/1.0 (yadhavmundekkat@gmail.com)'
+            }
+        });
         if(response.status == 200) { 
             const data = response.data.routes[0] 
             return { 
@@ -57,7 +65,11 @@ module.exports.getSuggestions = async (address)=>{
     }
 
     try { 
-        const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`)
+        const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`, {
+            headers: {
+                'User-Agent': 'Uber-clone/1.0 (yadhavmundekkat@gmail.com)'
+            }
+        });
 
         if(response.status == 200) { 
             const data = response.data
